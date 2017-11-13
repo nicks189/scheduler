@@ -23,9 +23,9 @@ public class SchedulerController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value="/{username}", method=RequestMethod.GET)
-    public String home(@PathVariable(value="username") String username, Model model) {
-        User user = this.userService.getUserByUsername(username);
+    @RequestMapping(method=RequestMethod.GET)
+    public String home(Model model) {
+        User user = this.userService.getUserByUsername("nsteger");
         if (user == null) {
             return "error";
         }
@@ -34,10 +34,10 @@ public class SchedulerController {
         return "scheduler";
     }
 
-    @RequestMapping(value={"/{username}/events"}, method=RequestMethod.GET)
-    public String getEventsForUser(@PathVariable(value="username")String username, Model model){
+    @RequestMapping(value={"/events"}, method=RequestMethod.GET)
+    public String getEventsForUser(Model model){
         List<Event> events = null;
-        User user = this.userService.getUserByUsername(username);
+        User user = this.userService.getUserByUsername("nsteger");
         if (user != null) {
             events = this.eventService.getAllEventsForUser(user);
         } else {
@@ -51,11 +51,11 @@ public class SchedulerController {
         return "scheduler";
     }
 
-    @RequestMapping(value={"/{username}/{date}"}, method=RequestMethod.GET)
+    @RequestMapping(value={"/{date}"}, method=RequestMethod.GET)
     public String getEventsForUserByDate(@PathVariable(value="date", required=false) String dateString,
-                                   @PathVariable(value="username")String username, Model model){
+                                   Model model){
         List<Event> events = null;
-        User user = this.userService.getUserByUsername(username);
+        User user = this.userService.getUserByUsername("nsteger");
         if (user != null) {
             events = this.eventService.getEventsForDateAndUser(dateString, user);
         } else {
@@ -74,14 +74,11 @@ public class SchedulerController {
         if (bindingResult.hasErrors()) {
             return "error";
         }
-        this.eventService.saveEvent(event);
         User user = this.userService.getUserByUsername("nsteger");
+        event.setUserId(user.getId());
+        this.eventService.saveEvent(event);
         List<Event> events = this.eventService.getAllEventsForUser(user);
-        model.addAttribute("events", events);
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("currentDate", DateService.getCurrentDateString());
-        model.addAttribute("mode", "MODE_EVENTS");
-        return "result";
+        return "redirect:/scheduler/events";
     }
 
     @RequestMapping(value="/new-event", method=RequestMethod.GET)
