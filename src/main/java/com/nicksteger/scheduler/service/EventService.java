@@ -55,8 +55,7 @@ public class EventService {
     }
 
     public Event validateEvent(Event event) {
-        Date date = event.getEventDateTime();
-        event.setEventDatetime(DateService.convertTo24HourDate(date));
+        event.setEventDateTime(DateService.convertTo24HourDate(event.getEventDateTime()));
         return event;
     }
 }
