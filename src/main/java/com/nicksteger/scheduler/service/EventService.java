@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,7 +30,7 @@ public class EventService {
     }
 
     public void saveEvent(Event event) {
-        this.eventRepository.save(event);
+        this.eventRepository.save(this.validateEvent(event));
     }
 
     public void deleteEvent(long id) {
@@ -53,5 +54,9 @@ public class EventService {
         return events;
     }
 
-
+    public Event validateEvent(Event event) {
+        Date date = event.getEventDateTime();
+        event.setEventDatetime(DateService.convertTo24HourDate(date));
+        return event;
+    }
 }
