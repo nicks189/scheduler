@@ -1,5 +1,7 @@
 package com.nicksteger.scheduler.data.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -15,6 +17,7 @@ public class Event {
     @Column(name="INFO")
     private String info;
     @Column(name="EVENT_DATETIME")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date eventDateTime;
     @Column(name="USER_ID")
     private long userId;

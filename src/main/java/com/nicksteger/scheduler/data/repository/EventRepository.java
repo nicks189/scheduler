@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface EventRepository extends PagingAndSortingRepository<Event, Long> {
-    List<Event> findByEventDateTime(Date dateTime);
+    List<Event> findByEventDateTime(Date eventDateTime);
 
     List<Event> findByUserId(long userId);
 
