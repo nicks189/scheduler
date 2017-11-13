@@ -50,7 +50,7 @@ public class Event {
         return eventDateTime;
     }
 
-    public void setEventDatetime(Date eventDateTime) {
+    public void setEventDateTime(Date eventDateTime) {
         this.eventDateTime = eventDateTime;
     }
 
