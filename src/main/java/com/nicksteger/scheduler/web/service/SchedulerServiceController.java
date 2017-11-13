@@ -39,7 +39,7 @@ public class SchedulerServiceController {
         Event event = new Event();
         event.setName(name);
         event.setInfo(info);
-        event.setEventDatetime(new Date());
+        event.setEventDateTime(new Date());
         event.setUserId(1);
         this.eventService.saveEvent(event);
         return this.eventService.getAllEvents();
