@@ -22,13 +22,13 @@
 
     <div role="navigation">
         <div class="navbar navbar-inverse">
-            <a th:href="@{/scheduler/__${username}__}" class="navbar-brand">Scheduler</a>
+            <a th:href="@{/scheduler/}" class="navbar-brand">Scheduler</a>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="#">Calendar</a></li>
                     <li><a th:href="@{/scheduler/new-event}">New Event</a></li>
-                    <li><a th:href="@{/scheduler/__${username}__/events}">All Events</a></li>
-                    <li><a th:href="@{/scheduler/__${username}__/__${currentDate}__}">Today's Events</a></li>
+                    <li><a th:href="@{/scheduler/events}">All Events</a></li>
+                    <li><a th:href="@{/scheduler/__${currentDate}__}">Today's Events</a></li>
                 </ul>
             </div>
         </div>
