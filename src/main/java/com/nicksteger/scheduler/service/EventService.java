@@ -29,8 +29,8 @@ public class EventService {
         return this.eventRepository.findById(id);
     }
 
-    public void saveEvent(Event event) {
-        this.eventRepository.save(this.validateEvent(event));
+    public Event saveEvent(Event event) {
+        return this.eventRepository.save(event);
     }
 
     public void deleteEvent(long id) {
@@ -54,8 +54,16 @@ public class EventService {
         return events;
     }
 
-    public Event validateEvent(Event event) {
-        event.setEventDateTime(DateService.convertTo24HourDate(event.getEventDateTime()));
-        return event;
+    public List<Event> deleteExpiredEvents(List<Event> events) {
+        List<Event> returnEvents = new ArrayList<>();
+        Date currentDate = new Date();
+        for (Event event : events) {
+            if (event.getEventDateTime().before(currentDate)) {
+                this.deleteEvent(event.getId());
+            } else {
+                returnEvents.add(event);
+            }
+        }
+        return returnEvents;
     }
 }
