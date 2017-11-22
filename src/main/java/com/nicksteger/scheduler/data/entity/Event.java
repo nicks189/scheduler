@@ -3,6 +3,7 @@ package com.nicksteger.scheduler.data.entity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -12,12 +13,14 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="EVENT_ID")
     private long id;
+    @Size(max=16)
     @Column(name="NAME")
     private String name;
+    @Size(max=200)
     @Column(name="INFO")
     private String info;
     @Column(name="EVENT_DATETIME")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
     private Date eventDateTime;
     @Column(name="USER_ID")
     private long userId;
