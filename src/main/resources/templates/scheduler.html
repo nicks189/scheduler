@@ -25,10 +25,10 @@
             <a th:href="@{/scheduler/}" class="navbar-brand">Scheduler</a>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="#">Calendar</a></li>
+                    <li><a th:href="@{/scheduler/calendar}">Calendar</a></li>
                     <li><a th:href="@{/scheduler/new-event}">New Event</a></li>
                     <li><a th:href="@{/scheduler/events}">All Events</a></li>
-                    <li><a th:href="@{/scheduler/__${currentDate}__}">Today's Events</a></li>
+                    <li><a th:href="@{/scheduler/calendar/__${currentDate}__}">Today's Events</a></li>
                 </ul>
             </div>
         </div>
@@ -65,8 +65,8 @@
                         </tbody>
                     </table>
                 </div>
+                <h4 class="text-right"><a th:href="@{/scheduler/delete-expired-events}" onclick="return confirm('Are you sure?')">Delete expired events</a></h4>
             </div>
-            <h4><a th:href="@{/scheduler/delete-expired-events}">Delete expired events</a></h4>
         </span>
         <span th:case="'MODE_SAVE'">
             <div class="container text-center">
@@ -101,6 +101,25 @@
                 </form>
             </div>
         </span>
+        <span th:case="'MODE_CALENDAR'">
+            <div class="container text-center">
+                <h3>Find events</h3>
+                <hr />
+                <form class="form-horizontal" action="#" th:action="@{/scheduler/calendar-form}" th:object="${generalFormView}" method="post">
+                    <div class="form-group">
+                        <div class="input-group" id="datetimepicker2">
+                            <input type="text" class="form-control" th:field="*{formText}" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Go" />
+                    </div>
+                </form>
+            </div>
+        </span>
     </span>
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -110,4 +129,12 @@
 <script type="text/javascript" th:src="@{/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js}"></script>
 <script th:src="@{/js/site.js}"></script>
 </body>
+<footer class="footer navbar-inverse navbar-fixed-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4"><p class="text-muted">@Copyright 2017 Nick Steger</p></div>
+        </div>
+    </div>
+</footer>
 </html>

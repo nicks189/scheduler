@@ -1,5 +1,6 @@
 package com.nicksteger.scheduler.web.application;
 
+import com.nicksteger.scheduler.data.entity.GeneralFormView;
 import com.nicksteger.scheduler.service.DateService;
 import com.nicksteger.scheduler.service.EventService;
 import com.nicksteger.scheduler.service.UserService;
@@ -31,6 +32,7 @@ public class SchedulerController {
             return "error";
         }
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_HOME");
         return "scheduler";
     }
@@ -52,7 +54,7 @@ public class SchedulerController {
         return "scheduler";
     }
 
-    @RequestMapping(value={"/{date}"}, method=RequestMethod.GET)
+    @RequestMapping(value={"/calendar/{date}"}, method=RequestMethod.GET)
     public String getEventsByDate(@PathVariable(value="date", required=false) String dateString,
                                    Model model){
         List<Event> events = null;
@@ -68,6 +70,24 @@ public class SchedulerController {
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_EVENTS");
         return "scheduler";
+    }
+
+    @RequestMapping(value={"/calendar"}, method=RequestMethod.GET)
+    public String calendar(Model model) {
+        User user = this.userService.getUserByUsername("nsteger");
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("generalFormView", new GeneralFormView());
+        model.addAttribute("currentDate", DateService.getCurrentDateString());
+        model.addAttribute("mode", "MODE_CALENDAR");
+        return "scheduler";
+    }
+
+    @RequestMapping(value={"/calendar-form"}, method=RequestMethod.POST)
+    public String calendarForm(@ModelAttribute(value="generalForm") GeneralFormView generalFormView, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "error";
+        }
+        return "redirect:/scheduler/calendar/" + generalFormView.getFormText();
     }
 
     @RequestMapping(value="/save-event", method=RequestMethod.POST)
