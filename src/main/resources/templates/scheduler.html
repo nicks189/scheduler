@@ -20,7 +20,7 @@
 </head>
 <body>
 
-    <div role="navigation">
+<div role="navigation">
         <div class="navbar navbar-inverse">
             <a th:href="@{/scheduler/}" class="navbar-brand">Scheduler</a>
             <div class="navbar-collapse collapse">
@@ -53,23 +53,27 @@
                                 <th>Info</th>
                                 <th>Time and Date</th>
                                 <th>Delete</th>
+                                <th>Update</th>
                             </tr>
                         </thead>
                         <tbody th:each="event : ${events}">
                         <td th:text="${event.name}"></td>
                         <td th:text="${event.info}"></td>
-                        <td th:text="${event.eventDateTime}"></td>
+                        <td th:text="${#dates.format(event.eventDateTime, 'yyyy-MM-dd hh:mm aa')}"></td>
                         <td><a th:href="@{/scheduler/delete-event/__${event.id}__}"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        <td><a th:href="@{/scheduler/update-event/__${event.id}__}"><span class="glyphicon glyphicon-pencil"></span></a></td>
                         </tbody>
                     </table>
                 </div>
             </div>
+            <h4><a th:href="@{/scheduler/delete-expired-events}">Delete expired events</a></h4>
         </span>
-        <span th:case="'MODE_NEW'">
+        <span th:case="'MODE_SAVE'">
             <div class="container text-center">
                 <h3>Manage Event</h3>
                 <hr />
                 <form class="form-horizontal" action="#" th:action="@{/scheduler/save-event}" th:object="${event}" method="post">
+                    <span><input type="hidden" th:field="*{id}" /></span>
                     <div class="form-group">
                         <label class="control-label col-md-3">Name</label>
                         <div class="input-group col-md-6">
@@ -85,7 +89,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3">Time and Date</label>
                         <div class="input-group date col-md-6" id="datetimepicker1">
-                            <input type="date" class="form-control" name="eventDateTime" th:field="*{eventDateTime}"/>
+                            <input type="text" class="form-control" name="eventDateTime" th:field="*{eventDateTime}"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
