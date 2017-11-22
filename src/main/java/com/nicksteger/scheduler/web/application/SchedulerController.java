@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -35,7 +36,7 @@ public class SchedulerController {
     }
 
     @RequestMapping(value={"/events"}, method=RequestMethod.GET)
-    public String getEventsForUser(Model model){
+    public String getEvents(Model model){
         List<Event> events = null;
         User user = this.userService.getUserByUsername("nsteger");
         if (user != null) {
@@ -52,7 +53,7 @@ public class SchedulerController {
     }
 
     @RequestMapping(value={"/{date}"}, method=RequestMethod.GET)
-    public String getEventsForUserByDate(@PathVariable(value="date", required=false) String dateString,
+    public String getEventsByDate(@PathVariable(value="date", required=false) String dateString,
                                    Model model){
         List<Event> events = null;
         User user = this.userService.getUserByUsername("nsteger");
@@ -70,14 +71,13 @@ public class SchedulerController {
     }
 
     @RequestMapping(value="/save-event", method=RequestMethod.POST)
-    public String saveEvent(@ModelAttribute(value="event") Event event, BindingResult bindingResult, Model model) {
+    public String saveEvent(@Valid @ModelAttribute(value="event") Event event, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "error";
         }
         User user = this.userService.getUserByUsername("nsteger");
         event.setUserId(user.getId());
         this.eventService.saveEvent(event);
-        List<Event> events = this.eventService.getAllEventsForUser(user);
         return "redirect:/scheduler/events";
     }
 
@@ -87,7 +87,7 @@ public class SchedulerController {
         model.addAttribute("event", new Event());
         model.addAttribute("username", user.getUsername());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
-        model.addAttribute("mode", "MODE_NEW");
+        model.addAttribute("mode", "MODE_SAVE");
         return "scheduler";
     }
 
@@ -95,10 +95,11 @@ public class SchedulerController {
     public String updateEvent(@PathVariable(value="id") long id, Model model) {
         Event event = this.eventService.getEventById(id);
         User user = this.userService.getUserByUsername("nsteger");
+        event.setId(id);
         model.addAttribute("event", event);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
-        model.addAttribute("mode", "MODE_UPDATE");
+        model.addAttribute("mode", "MODE_SAVE");
         return "scheduler";
     }
 
@@ -112,5 +113,12 @@ public class SchedulerController {
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_EVENTS");
         return "scheduler";
+    }
+
+    @RequestMapping(value="/delete-expired-events", method=RequestMethod.GET)
+    public String deleteExpiredEvents(Model model) {
+        User user = this.userService.getUserByUsername("nsteger");
+        this.eventService.deleteExpiredEvents(this.eventService.getAllEventsForUser(user));
+        return "redirect:/scheduler/events";
     }
 }
