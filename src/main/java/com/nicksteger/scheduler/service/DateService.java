@@ -51,12 +51,11 @@ public class DateService {
     }
 
     public static String getCurrentDateString() {
-        // Date currentDate = new Date();
-        // return currentDate.getYear() + "-" + currentDate.getMonth() + "-" + currentDate.getDate();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return dtf.format(LocalDateTime.now());
     }
 
+    // Not used right now: maybe still useful at some point?
     public static Date convertTo24HourDate(Date date) {
         if (date != null) {
             return createDateTimeFromDateTimeString(DATE_TIME_FORMAT.format(date));
