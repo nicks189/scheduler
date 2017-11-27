@@ -43,29 +43,34 @@
         </span>
         <span th:case="'MODE_EVENTS'">
             <div class="container text-center" id="eventDiv">
-                <h3>My events</h3>
-                <hr />
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Info</th>
-                                <th>Time and Date</th>
-                                <th>Delete</th>
-                                <th>Update</th>
-                            </tr>
-                        </thead>
-                        <tbody th:each="event : ${events}">
-                        <td th:text="${event.name}"></td>
-                        <td th:text="${event.info}"></td>
-                        <td th:text="${#dates.format(event.eventDateTime, 'yyyy-MM-dd hh:mm aa')}"></td>
-                        <td><a th:href="@{/scheduler/delete-event/__${event.id}__}"><span class="glyphicon glyphicon-trash"></span></a></td>
-                        <td><a th:href="@{/scheduler/update-event/__${event.id}__}"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                        </tbody>
-                    </table>
-                </div>
-                <h4 class="text-right"><a th:href="@{/scheduler/delete-expired-events}" onclick="return confirm('Are you sure?')">Delete expired events</a></h4>
+                <span th:if="${#lists.isEmpty(events)}">
+                    <h3>No events scheduled</h3>
+                </span>
+                <span th:if="${not #lists.isEmpty(events)}">
+                    <h3>Events</h3>
+                    <hr />
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Info</th>
+                                    <th>Time and Date</th>
+                                    <th>Delete</th>
+                                    <th>Update</th>
+                                </tr>
+                            </thead>
+                            <tbody th:each="event : ${events}">
+                            <td th:text="${event.name}"></td>
+                            <td th:text="${event.info}"></td>
+                            <td th:text="${#dates.format(event.eventDateTime, 'yyyy-MM-dd hh:mm aa')}"></td>
+                            <td><a th:href="@{/scheduler/delete-event/__${event.id}__}"><span class="glyphicon glyphicon-trash"></span></a></td>
+                            <td><a th:href="@{/scheduler/update-event/__${event.id}__}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4 class="text-right"><a th:href="@{/scheduler/delete-expired-events}" onclick="return confirm('Are you sure?')">Delete expired events</a></h4>
+                </span>
             </div>
         </span>
         <span th:case="'MODE_SAVE'">
