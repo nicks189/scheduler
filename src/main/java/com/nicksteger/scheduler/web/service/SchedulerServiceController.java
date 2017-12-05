@@ -18,7 +18,6 @@ public class SchedulerServiceController {
     @Autowired
     private EventService eventService;
 
-    // For testing only
     @RequestMapping(value="/events", method=RequestMethod.GET)
     public List<Event> getAllEvents() {
         return this.eventService.getAllEvents();
@@ -33,7 +32,6 @@ public class SchedulerServiceController {
     //     return "scheduler";
     // }
 
-    // For testing only
     @RequestMapping(value="/save-event", method=RequestMethod.GET)
     public List<Event> saveEvent(@RequestParam(value="name") String name, @RequestParam(value="info") String info) {
         Event event = new Event();
@@ -45,7 +43,6 @@ public class SchedulerServiceController {
         return this.eventService.getAllEvents();
     }
 
-    // For testing only
     @RequestMapping(value="/delete-event", method = RequestMethod.GET)
     public List<Event> deleteEvent(@RequestParam(value="id") long id) {
         this.eventService.deleteEvent(id);
