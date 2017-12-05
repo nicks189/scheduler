@@ -1,6 +1,6 @@
 package com.nicksteger.scheduler.web.application;
 
-import com.nicksteger.scheduler.data.entity.GeneralFormView;
+import com.nicksteger.scheduler.data.view.GeneralFormView;
 import com.nicksteger.scheduler.service.DateService;
 import com.nicksteger.scheduler.service.EventService;
 import com.nicksteger.scheduler.service.UserService;
@@ -29,7 +29,7 @@ public class SchedulerController {
     public String home(Model model) {
         User user = this.userService.getUserByUsername("nsteger");
         if (user == null) {
-            return "error";
+            return "temp_error";
         }
         model.addAttribute("username", user.getUsername());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
@@ -44,9 +44,8 @@ public class SchedulerController {
         if (user != null) {
             events = this.eventService.getAllEventsForUser(user);
         } else {
-            return "error";
+            return "temp_error";
         }
-        model.addAttribute("event", new Event());
         model.addAttribute("events", events);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
@@ -62,7 +61,7 @@ public class SchedulerController {
         if (user != null) {
             events = this.eventService.getEventsForDateAndUser(dateString, user);
         } else {
-            return "error";
+            return "temp_error";
         }
         model.addAttribute("event", new Event());
         model.addAttribute("events", events);
@@ -85,7 +84,7 @@ public class SchedulerController {
     @RequestMapping(value={"/calendar-form"}, method=RequestMethod.POST)
     public String calendarForm(@ModelAttribute(value="generalForm") GeneralFormView generalFormView, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "error";
+            return "temp_error";
         }
         return "redirect:/scheduler/calendar/" + generalFormView.getFormText();
     }
@@ -93,7 +92,7 @@ public class SchedulerController {
     @RequestMapping(value="/save-event", method=RequestMethod.POST)
     public String saveEvent(@Valid @ModelAttribute(value="event") Event event, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "error";
+            return "temp_error";
         }
         User user = this.userService.getUserByUsername("nsteger");
         event.setUserId(user.getId());
