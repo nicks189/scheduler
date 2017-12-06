@@ -27,11 +27,11 @@ public class SchedulerController {
 
     @RequestMapping(method=RequestMethod.GET)
     public String home(Model model) {
-        User user = this.userService.getUserByUsername("nsteger");
+        User user = this.userService.getUserByEmail("nsteger189@gmail.com");
         if (user == null) {
             return "temp_error";
         }
-        model.addAttribute("username", user.getUsername());
+        model.addAttribute("username", user.getEmail());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_HOME");
         return "scheduler";
@@ -40,14 +40,14 @@ public class SchedulerController {
     @RequestMapping(value={"/events"}, method=RequestMethod.GET)
     public String getEvents(Model model){
         List<Event> events = null;
-        User user = this.userService.getUserByUsername("nsteger");
+        User user = this.userService.getUserByEmail("nsteger189@gmail.com");
         if (user != null) {
             events = this.eventService.getAllEventsForUser(user);
         } else {
             return "temp_error";
         }
         model.addAttribute("events", events);
-        model.addAttribute("username", user.getUsername());
+        model.addAttribute("username", user.getEmail());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_EVENTS");
         return "scheduler";
@@ -57,7 +57,7 @@ public class SchedulerController {
     public String getEventsByDate(@PathVariable(value="date", required=false) String dateString,
                                    Model model){
         List<Event> events = null;
-        User user = this.userService.getUserByUsername("nsteger");
+        User user = this.userService.getUserByEmail("nsteger189@gmail.com");
         if (user != null) {
             events = this.eventService.getEventsForDateAndUser(dateString, user);
         } else {
@@ -65,7 +65,7 @@ public class SchedulerController {
         }
         model.addAttribute("event", new Event());
         model.addAttribute("events", events);
-        model.addAttribute("username", user.getUsername());
+        model.addAttribute("username", user.getEmail());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_EVENTS");
         return "scheduler";
@@ -73,8 +73,8 @@ public class SchedulerController {
 
     @RequestMapping(value={"/calendar"}, method=RequestMethod.GET)
     public String calendar(Model model) {
-        User user = this.userService.getUserByUsername("nsteger");
-        model.addAttribute("username", user.getUsername());
+        User user = this.userService.getUserByEmail("nsteger189@gmail.com");
+        model.addAttribute("username", user.getEmail());
         model.addAttribute("generalFormView", new GeneralFormView());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_CALENDAR");
@@ -94,7 +94,7 @@ public class SchedulerController {
         if (bindingResult.hasErrors()) {
             return "temp_error";
         }
-        User user = this.userService.getUserByUsername("nsteger");
+        User user = this.userService.getUserByEmail("nsteger189@gmail.com");
         event.setUserId(user.getId());
         this.eventService.saveEvent(event);
         return "redirect:/scheduler/events";
@@ -102,9 +102,9 @@ public class SchedulerController {
 
     @RequestMapping(value="/new-event", method=RequestMethod.GET)
     public String newEvent(Model model) {
-        User user = this.userService.getUserByUsername("nsteger");
+        User user = this.userService.getUserByEmail("nsteger189@gmail.com");
         model.addAttribute("event", new Event());
-        model.addAttribute("username", user.getUsername());
+        model.addAttribute("username", user.getEmail());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_SAVE");
         return "scheduler";
@@ -113,10 +113,10 @@ public class SchedulerController {
     @RequestMapping(value="/update-event/{id}", method=RequestMethod.GET)
     public String updateEvent(@PathVariable(value="id") long id, Model model) {
         Event event = this.eventService.getEventById(id);
-        User user = this.userService.getUserByUsername("nsteger");
+        User user = this.userService.getUserByEmail("nsteger189@gmail.com");
         event.setId(id);
         model.addAttribute("event", event);
-        model.addAttribute("username", user.getUsername());
+        model.addAttribute("username", user.getEmail());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_SAVE");
         return "scheduler";
@@ -125,10 +125,10 @@ public class SchedulerController {
     @RequestMapping(value="/delete-event/{id}", method=RequestMethod.GET)
     public String deleteEvent(@PathVariable(value="id") long id, Model model) {
         this.eventService.deleteEvent(id);
-        User user = this.userService.getUserByUsername("nsteger");
+        User user = this.userService.getUserByEmail("nsteger189@gmail.com");
         List<Event> events = this.eventService.getAllEventsForUser(user);
         model.addAttribute("events", events);
-        model.addAttribute("username", user.getUsername());
+        model.addAttribute("username", user.getEmail());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_EVENTS");
         return "scheduler";
@@ -136,7 +136,7 @@ public class SchedulerController {
 
     @RequestMapping(value="/delete-expired-events", method=RequestMethod.GET)
     public String deleteExpiredEvents(Model model) {
-        User user = this.userService.getUserByUsername("nsteger");
+        User user = this.userService.getUserByEmail("nsteger189@gmail.com");
         this.eventService.deleteExpiredEvents(this.eventService.getAllEventsForUser(user));
         return "redirect:/scheduler/events";
     }
