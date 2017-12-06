@@ -1,5 +1,9 @@
 package com.nicksteger.scheduler.data.entity;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,10 +17,15 @@ public class User {
     private String firstName;
     @Column(name="LAST_NAME")
     private String lastName;
-    @Column(name="USERNAME")
-    private String username;
+    @Column(name="EMAIL")
+    @Email(message = "*Please provide a valid email address")
+    @NotEmpty(message = "*Please provide an email address")
+    private String email;
     // Temporarily storing as plain text
     @Column(name="HASHED_PASSWORD")
+    @Length(min = 6, message = "*Your password must have at least 6 characters")
+    @NotEmpty(message = "*Please provide your password")
+    @org.springframework.data.annotation.Transient
     private String hashedPassword;
 
     public long getId() {
@@ -43,12 +52,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String username) {
+        this.email= username;
     }
 
     public String getHashedPassword() {
