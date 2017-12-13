@@ -1,9 +1,10 @@
 package com.nicksteger.scheduler.data.entity;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -13,16 +14,19 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="EVENT_ID")
     private long id;
-    @Size(max=16)
     @Column(name="NAME")
+    @NotEmpty(message = "*Please provide an event name")
+    @Length(max = 32, message = "*Event name is too long")
     private String name;
-    @Size(max=200)
     @Column(name="INFO")
+    @Length(max = 255, message = "*Event info is too long")
     private String info;
     @Column(name="EVENT_DATETIME")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
+    @NotEmpty(message = "*Please provide an event date and time")
     private Date eventDateTime;
     @Column(name="USER_ID")
+    @NotEmpty
     private long userId;
 
     public long getId() {

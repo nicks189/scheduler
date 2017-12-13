@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="USER")
@@ -21,12 +22,14 @@ public class User {
     @Email(message = "*Please provide a valid email address")
     @NotEmpty(message = "*Please provide an email address")
     private String email;
-    // Temporarily storing as plain text
-    @Column(name="HASHED_PASSWORD")
+    @Column(name="PASSWORD")
     @Length(min = 6, message = "*Your password must have at least 6 characters")
     @NotEmpty(message = "*Please provide your password")
     @org.springframework.data.annotation.Transient
-    private String hashedPassword;
+    private String password;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+    private Set<Role> roles;
 
     public long getId() {
         return id;
@@ -57,14 +60,22 @@ public class User {
     }
 
     public void setEmail(String username) {
-        this.email= username;
+        this.email = username;
     }
 
-    public String getHashedPassword() {
-        return hashedPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setHashedPassword(String hashedPassword) {
-        this.hashedPassword = hashedPassword;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
