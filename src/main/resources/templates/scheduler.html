@@ -13,14 +13,14 @@
         <span th:case="'MODE_HOME'">
             <div class="container" id="homeDiv">
                 <div class="jumbotron text-center">
-                    <h1>Welcome to the Scheduler</h1>
+                    <h1>Welcome to the Scheduler <span sec:authorize="hasRole('ROLE_USER')"><span sec:authentication="name"></span></span></h1>
                 </div>
             </div>
         </span>
         <span th:case="'MODE_EVENTS'">
             <div class="container text-center" id="eventDiv">
                 <span th:if="${#lists.isEmpty(events)}">
-                    <h3>No events scheduled</h3>
+                    <h3>None scheduled</h3>
                 </span>
                 <span th:if="${not #lists.isEmpty(events)}">
                     <h3>Events</h3>
@@ -103,19 +103,10 @@
         </span>
     </span>
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script type="text/javascript" th:src="@{/bower_components/moment/min/moment.min.js}"></script>
-<script type="text/javascript" th:src="@{/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js}"></script>
-<script th:src="@{/js/site.js}"></script>
+    <!--/*/ <th:block th:include="fragments/footerinc :: foot"></th:block> /*/-->
+
 </body>
-<footer class="footer navbar-inverse navbar-fixed-bottom">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4"><p class="text-muted">@Copyright 2017 Nick Steger</p></div>
-        </div>
-    </div>
-</footer>
+
+<!--/*/ <th:block th:include="fragments/footer :: footer"></th:block> /*/-->
+
 </html>

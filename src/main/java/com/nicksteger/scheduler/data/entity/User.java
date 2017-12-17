@@ -15,9 +15,8 @@ public class User {
     private String lastName;
     @Column(name="USERNAME")
     private String username;
-    // Temporarily storing as plain text
-    @Column(name="HASHED_PASSWORD")
-    private String hashedPassword;
+    @Column(name="PASSWORD")
+    private String password;
 
     public long getId() {
         return id;
@@ -51,11 +50,11 @@ public class User {
         this.username = username;
     }
 
-    public String getHashedPassword() {
-        return hashedPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setHashedPassword(String hashedPassword) {
-        this.hashedPassword = hashedPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
