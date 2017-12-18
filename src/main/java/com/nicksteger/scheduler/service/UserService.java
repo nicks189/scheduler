@@ -19,9 +19,9 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        List<User> events = new ArrayList<>();
-        this.userRepository.findAll().forEach(events::add);
-        return events;
+        List<User> users = new ArrayList<>();
+        this.userRepository.findAll().forEach(users::add);
+        return users;
     }
 
     public User getUserByUsername(String username) {
@@ -36,7 +36,7 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-    public void deleteEvent(User user) {
+    public void deleteUser(User user) {
         this.userRepository.delete(user.getId());
     }
 }
