@@ -15,7 +15,10 @@ public class User {
     private String lastName;
     @Column(name="USERNAME")
     private String username;
-    @Column(name="PASSWORD")
+    @Column(name="ENCRYPTED_PASSWORD")
+    private String encryptedPassword;
+
+    @Transient
     private String password;
 
     public long getId() {
@@ -50,11 +53,15 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEncryptedPassword() {
+        return encryptedPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
     }
+
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) {this.password = password; }
 }

@@ -24,7 +24,7 @@ public class UserToUserDetails implements Converter<User, UserDetails> {
         UserDetailsImpl userDetails = new UserDetailsImpl();
         if (user != null) {
             userDetails.setUsername(user.getUsername());
-            userDetails.setPassword(user.getPassword());
+            userDetails.setPassword(user.getEncryptedPassword());
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
             List<UserRole> userRoles = this.userRoleService.getUserRolesByUsername(user.getUsername());
             for (UserRole userRole : userRoles) {

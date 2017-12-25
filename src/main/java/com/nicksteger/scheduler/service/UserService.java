@@ -3,6 +3,7 @@ package com.nicksteger.scheduler.service;
 import com.nicksteger.scheduler.data.entity.User;
 import com.nicksteger.scheduler.data.repository.EventRepository;
 import com.nicksteger.scheduler.data.repository.UserRepository;
+import com.nicksteger.scheduler.service.security.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +13,12 @@ import java.util.List;
 @Service
 public class UserService {
     private UserRepository userRepository;
+    private EncryptionService encryptionService;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, EncryptionService encryptionService) {
         this.userRepository = userRepository;
+        this.encryptionService = encryptionService;
     }
 
     public List<User> getAllUsers() {
@@ -33,6 +36,9 @@ public class UserService {
     }
 
     public void saveUser(User user) {
+        if (user.getPassword() != null) {
+            user.setEncryptedPassword(encryptionService.encryptString(user.getPassword()));
+        }
         this.userRepository.save(user);
     }
 
