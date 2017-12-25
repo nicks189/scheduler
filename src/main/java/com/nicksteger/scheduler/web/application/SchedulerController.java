@@ -31,8 +31,6 @@ public class SchedulerController {
         if (user == null) {
             return "temp_error";
         }
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_HOME");
         return "scheduler";
     }
@@ -41,13 +39,11 @@ public class SchedulerController {
     public String getEvents(Model model){
         List<Event> events = null;
         User user = this.userService.getUserByUsername("nsteger");
-        if (user != null) {
-            events = this.eventService.getAllEventsForUser(user);
-        } else {
+        if (user == null) {
             return "temp_error";
         }
+        events = this.eventService.getAllEventsForUser(user);
         model.addAttribute("events", events);
-        model.addAttribute("username", user.getUsername());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_EVENTS");
         return "scheduler";
@@ -58,14 +54,11 @@ public class SchedulerController {
                                    Model model){
         List<Event> events = null;
         User user = this.userService.getUserByUsername("nsteger");
-        if (user != null) {
-            events = this.eventService.getEventsForDateAndUser(dateString, user);
-        } else {
+        if (user == null) {
             return "temp_error";
         }
-        model.addAttribute("event", new Event());
+        events = this.eventService.getEventsForDateAndUser(dateString, user);
         model.addAttribute("events", events);
-        model.addAttribute("username", user.getUsername());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_EVENTS");
         return "scheduler";
@@ -104,7 +97,6 @@ public class SchedulerController {
     public String newEvent(Model model) {
         User user = this.userService.getUserByUsername("nsteger");
         model.addAttribute("event", new Event());
-        model.addAttribute("username", user.getUsername());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_SAVE");
         return "scheduler";
@@ -116,7 +108,6 @@ public class SchedulerController {
         User user = this.userService.getUserByUsername("nsteger");
         event.setId(id);
         model.addAttribute("event", event);
-        model.addAttribute("username", user.getUsername());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_SAVE");
         return "scheduler";
@@ -128,7 +119,6 @@ public class SchedulerController {
         User user = this.userService.getUserByUsername("nsteger");
         List<Event> events = this.eventService.getAllEventsForUser(user);
         model.addAttribute("events", events);
-        model.addAttribute("username", user.getUsername());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_EVENTS");
         return "scheduler";
