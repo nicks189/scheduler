@@ -10,7 +10,7 @@
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
     <div>
         <div th:if="${param.error}">
-            <label style="color:red">Invalid email and password.</label>
+            <label style="color:red">Invalid email and/or password.</label>
         </div>
         <div th:if="${param.logout}">
             <label>
