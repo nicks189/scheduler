@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface UserRoleRepository extends PagingAndSortingRepository<UserRole, Long> {
-    List<UserRole> findByUserRoleId(long id);
+    List<UserRole> findById(long id);
 
-    List<UserRole> findByUserId(long id);
+    List<UserRole> findByUsername(String username);
 }
