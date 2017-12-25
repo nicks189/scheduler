@@ -4,6 +4,7 @@ import com.nicksteger.scheduler.data.entity.Event;
 import com.nicksteger.scheduler.data.entity.User;
 import com.nicksteger.scheduler.data.entity.UserRole;
 import com.nicksteger.scheduler.service.EventService;
+import com.nicksteger.scheduler.service.UserRoleService;
 import com.nicksteger.scheduler.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -13,17 +14,19 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /*
-Used to bootstrap data into H2 embedded database
+Bootstrap data into H2 embedded database
  */
 @Component
 public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedEvent> {
     private UserService userService;
     private EventService eventService;
+    private UserRoleService userRoleService;
 
     @Autowired
-    public SpringJpaBootstrap(UserService userService, EventService eventService) {
+    public SpringJpaBootstrap(UserService userService, EventService eventService, UserRoleService userRoleService) {
         this.userService = userService;
         this.eventService = eventService;
+        this.userRoleService = userRoleService;
     }
 
     @Override
@@ -44,10 +47,12 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         UserRole userRole1 = new UserRole();
         userRole1.setRole("ROLE_USER");
         userRole1.setUsername("nsteger");
+        userRoleService.saveUserRole(userRole1);
 
         UserRole userRole2 = new UserRole();
         userRole2.setRole("ROLE_ADMIN");
         userRole2.setUsername("nsteger");
+        userRoleService.saveUserRole(userRole2);
     }
 
     public void loadEvents() {
