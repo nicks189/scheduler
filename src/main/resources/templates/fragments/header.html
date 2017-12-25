@@ -24,7 +24,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li sec:authorize="isAnonymous()"><a th:href="@{/scheduler/login}">Sign in</a></li>
-                <li sec:authorize="hasRole('USER')"><a th:href="@{/scheduler/logout}">Sign out</a></li>
+                <li sec:authorize="hasRole('ROLE_USER')"><a th:href="@{/scheduler/logout}">Sign out</a></li>
                 <li><a th:href="@{/scheduler/calendar}">Calendar</a></li>
                 <li><a th:href="@{/scheduler/new-event}">New Event</a></li>
                 <li><a th:href="@{/scheduler/events}">All Events</a></li>
