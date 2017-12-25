@@ -23,12 +23,12 @@ public class UserRoleService {
         return userRoles;
     }
 
-    public List<UserRole> getUserRolesByUserId(long id) {
-        return this.userRoleRepository.findByUserId(id);
+    public List<UserRole> getUserRolesByUsername(String username) {
+        return this.userRoleRepository.findByUsername(username);
     }
 
     public List<UserRole> getUserRoleById(long id) {
-        return this.userRoleRepository.findByUserRoleId(id);
+        return this.userRoleRepository.findById(id);
     }
 
     public void saveUserRole(UserRole userRole) {
