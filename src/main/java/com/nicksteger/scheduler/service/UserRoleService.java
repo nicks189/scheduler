@@ -17,7 +17,7 @@ public class UserRoleService {
         this.userRoleRepository = userRoleRepository;
     }
 
-    public List<UserRole> getAllUsersRoles() {
+    public List<UserRole> getAllUserRoles() {
         List<UserRole> userRoles = new ArrayList<>();
         this.userRoleRepository.findAll().forEach(userRoles::add);
         return userRoles;
