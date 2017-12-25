@@ -20,7 +20,7 @@ public class DateService {
                 // Limit date strings to yyyy-MM-dd form
                 dateString = dateString.substring(0, DATE_STRING_MAX_LENGTH);
                 date = DATE_FORMAT.parse(dateString);
-            } catch (Exception e){
+            } catch (Exception e) {
                 date = new Date();
             }
         } else {
@@ -36,7 +36,7 @@ public class DateService {
                 // Limit date strings to yyyy-MM-dd HH:mm:ss form
                 dateTimeString = dateTimeString.substring(0, DATE_TIME_STRING_MAX_LENGTH);
                 date = DATE_TIME_FORMAT.parse(dateTimeString);
-            } catch (Exception e){
+            } catch (Exception e) {
                 date = new Date();
             }
         } else {
