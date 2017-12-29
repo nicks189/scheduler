@@ -39,7 +39,7 @@
                             <tbody th:each="event : ${events}">
                             <td th:text="${event.name}"></td>
                             <td th:text="${event.info}"></td>
-                            <td th:text="${#dates.format(event.eventDateTime, 'yyyy-MM-dd hh:mm aa')}"></td>
+                            <td th:text="${#dates.format(event.eventDateTime, 'MMM dd yyyy hh:mm aa')}"></td>
                             <td><a th:href="@{/scheduler/delete-event/__${event.id}__}"><span class="glyphicon glyphicon-trash"></span></a></td>
                             <td><a th:href="@{/scheduler/update-event/__${event.id}__}"><span class="glyphicon glyphicon-pencil"></span></a></td>
                             </tbody>
