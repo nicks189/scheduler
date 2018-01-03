@@ -32,6 +32,7 @@ public class SchedulerController {
             return "temp_error";
         }
         model.addAttribute("mode", "MODE_HOME");
+        model.addAttribute("firstname", user.getFirstName());
         return "scheduler";
     }
 
