@@ -1,12 +1,15 @@
 package com.nicksteger.scheduler.web.application;
 
-import com.nicksteger.scheduler.data.view.GeneralFormView;
+import com.nicksteger.scheduler.view.GeneralFormView;
 import com.nicksteger.scheduler.service.DateService;
 import com.nicksteger.scheduler.service.EventService;
 import com.nicksteger.scheduler.service.UserService;
 import com.nicksteger.scheduler.data.entity.Event;
 import com.nicksteger.scheduler.data.entity.User;
+import com.nicksteger.scheduler.service.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping(value="/scheduler")
+@RequestMapping(value = "/scheduler")
 @SuppressWarnings("Duplicates")
 public class SchedulerController {
 
@@ -25,21 +28,20 @@ public class SchedulerController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method=RequestMethod.GET)
-    public String home(Model model) {
-        User user = this.userService.getUserByUsername("nsteger");
-        if (user == null) {
-            return "temp_error";
+    @RequestMapping(method = RequestMethod.GET)
+    public String home(Model model, Authentication authentication) {
+        User user = this.userService.getUserFromAuthentication(authentication);
+        if (user != null) {
+            model.addAttribute("firstname", user.getFirstName());
         }
         model.addAttribute("mode", "MODE_HOME");
-        model.addAttribute("firstname", user.getFirstName());
         return "scheduler";
     }
 
-    @RequestMapping(value={"/events"}, method=RequestMethod.GET)
-    public String getEvents(Model model){
+    @RequestMapping(value ={"/events"}, method = RequestMethod.GET)
+    public String getEvents(Model model, Authentication authentication) {
         List<Event> events = null;
-        User user = this.userService.getUserByUsername("nsteger");
+        User user = this.userService.getUserFromAuthentication(authentication);
         if (user == null) {
             return "temp_error";
         }
@@ -50,11 +52,11 @@ public class SchedulerController {
         return "scheduler";
     }
 
-    @RequestMapping(value={"/calendar/{date}"}, method=RequestMethod.GET)
-    public String getEventsByDate(@PathVariable(value="date", required=false) String dateString,
-                                   Model model){
+    @RequestMapping(value ={"/calendar/{date}"}, method = RequestMethod.GET)
+    public String getEventsByDate(@PathVariable(value = "date", required=false) String dateString,
+                                   Model model, Authentication authentication) {
         List<Event> events = null;
-        User user = this.userService.getUserByUsername("nsteger");
+        User user = this.userService.getUserFromAuthentication(authentication);
         if (user == null) {
             return "temp_error";
         }
@@ -65,48 +67,50 @@ public class SchedulerController {
         return "scheduler";
     }
 
-    @RequestMapping(value={"/calendar"}, method=RequestMethod.GET)
+    @RequestMapping(value ={"/calendar"}, method = RequestMethod.GET)
     public String calendar(Model model) {
-        User user = this.userService.getUserByUsername("nsteger");
-        model.addAttribute("username", user.getUsername());
         model.addAttribute("generalFormView", new GeneralFormView());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_CALENDAR");
         return "scheduler";
     }
 
-    @RequestMapping(value={"/calendar-form"}, method=RequestMethod.POST)
-    public String calendarForm(@ModelAttribute(value="generalForm") GeneralFormView generalFormView, BindingResult bindingResult) {
+    @RequestMapping(value ={"/calendar-form"}, method = RequestMethod.POST)
+    public String calendarForm(@ModelAttribute(value = "generalForm") GeneralFormView generalFormView,
+                               BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "temp_error";
         }
         return "redirect:/scheduler/calendar/" + generalFormView.getFormText();
     }
 
-    @RequestMapping(value="/save-event", method=RequestMethod.POST)
-    public String saveEvent(@Valid @ModelAttribute(value="event") Event event, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+    @RequestMapping(value = "/save-event", method = RequestMethod.POST)
+    public String saveEvent(@Valid @ModelAttribute(value = "event") Event event, BindingResult bindingResult,
+                            Authentication authentication) {
+        User user = this.userService.getUserFromAuthentication(authentication);
+        if (bindingResult.hasErrors() || user == null) {
             return "temp_error";
         }
-        User user = this.userService.getUserByUsername("nsteger");
         event.setUserId(user.getId());
         this.eventService.saveEvent(event);
         return "redirect:/scheduler/events";
     }
 
-    @RequestMapping(value="/new-event", method=RequestMethod.GET)
+    @RequestMapping(value = "/new-event", method = RequestMethod.GET)
     public String newEvent(Model model) {
-        User user = this.userService.getUserByUsername("nsteger");
         model.addAttribute("event", new Event());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_SAVE");
         return "scheduler";
     }
 
-    @RequestMapping(value="/update-event/{id}", method=RequestMethod.GET)
-    public String updateEvent(@PathVariable(value="id") long id, Model model) {
+    @RequestMapping(value = "/update-event/{id}", method = RequestMethod.GET)
+    public String updateEvent(@PathVariable(value = "id") long id, Model model, Authentication authentication) {
+        User user = this.userService.getUserFromAuthentication(authentication);
+        if (user == null) {
+            return "temp_error";
+        }
         Event event = this.eventService.getEventById(id);
-        User user = this.userService.getUserByUsername("nsteger");
         event.setId(id);
         model.addAttribute("event", event);
         model.addAttribute("currentDate", DateService.getCurrentDateString());
@@ -114,8 +118,8 @@ public class SchedulerController {
         return "scheduler";
     }
 
-    @RequestMapping(value="/delete-event/{id}", method=RequestMethod.GET)
-    public String deleteEvent(@PathVariable(value="id") long id, Model model) {
+    @RequestMapping(value = "/delete-event/{id}", method = RequestMethod.GET)
+    public String deleteEvent(@PathVariable(value = "id") long id, Model model) {
         this.eventService.deleteEvent(id);
         User user = this.userService.getUserByUsername("nsteger");
         List<Event> events = this.eventService.getAllEventsForUser(user);
@@ -125,8 +129,8 @@ public class SchedulerController {
         return "scheduler";
     }
 
-    @RequestMapping(value="/delete-expired-events", method=RequestMethod.GET)
-    public String deleteExpiredEvents(Model model) {
+    @RequestMapping(value = "/delete-expired-events", method = RequestMethod.GET)
+    public String deleteExpiredEvents() {
         User user = this.userService.getUserByUsername("nsteger");
         this.eventService.deleteExpiredEvents(this.eventService.getAllEventsForUser(user));
         return "redirect:/scheduler/events";
@@ -141,4 +145,6 @@ public class SchedulerController {
     public String logout() {
         return "logout";
     }
+
+
 }
