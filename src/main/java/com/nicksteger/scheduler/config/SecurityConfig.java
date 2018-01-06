@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .authorizeRequests().antMatchers("/", "/scheduler", "/console/**").permitAll()
+                .authorizeRequests().antMatchers("/", "/scheduler").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/scheduler/login").permitAll()
