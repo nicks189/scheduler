@@ -6,7 +6,7 @@
 	<groupId>com.nicksteger</groupId>
 	<artifactId>schedular</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>schedular</name>
 	<description>Schedular application using spring boot</description>
