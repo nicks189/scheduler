@@ -59,11 +59,17 @@ public class EventService {
         Date currentDate = new Date();
         for (Event event : events) {
             if (event.getEventDateTime().before(currentDate)) {
-                this.deleteEvent(event.getId());
+                deleteEvent(event.getId());
             } else {
                 returnEvents.add(event);
             }
         }
         return returnEvents;
+    }
+
+    public void deleteEventForUser(Event event, User user) {
+        if (event.getUserId() == user.getId()) {
+            deleteEvent(event.getId());
+        }
     }
 }
