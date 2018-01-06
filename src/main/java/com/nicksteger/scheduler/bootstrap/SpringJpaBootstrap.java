@@ -43,6 +43,13 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         user.setLastName("Steger");
         user.setPassword("password");
         userService.saveUser(user);
+
+        User user2 = new User();
+        user2.setUsername("johnhancock");
+        user2.setFirstName("John");
+        user2.setLastName("Hancock");
+        user2.setPassword("password");
+        userService.saveUser(user2);
     }
 
     public void loadUserRoles() {
@@ -55,6 +62,16 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         userRole2.setRole("ROLE_ADMIN");
         userRole2.setUsername("nsteger");
         userRoleService.saveUserRole(userRole2);
+
+        UserRole userRole3 = new UserRole();
+        userRole3.setRole("ROLE_USER");
+        userRole3.setUsername("johnhancock");
+        userRoleService.saveUserRole(userRole3);
+
+        UserRole userRole4 = new UserRole();
+        userRole4.setRole("ROLE_ADMIN");
+        userRole4.setUsername("johnhancock");
+        userRoleService.saveUserRole(userRole4);
     }
 
     public void loadEvents() {
@@ -77,5 +94,15 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         date2.setMonth(12);
         event2.setEventDateTime(date2);
         eventService.saveEvent(event2);
+
+        Event event3 = new Event();
+        event3.setUserId(2);
+        event3.setName("Other");
+        event3.setInfo("Idk");
+        Date date3 = new Date();
+        date3.setDate(27);
+        date3.setMonth(12);
+        event3.setEventDateTime(date3);
+        eventService.saveEvent(event3);
     }
 }
