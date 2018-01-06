@@ -4,7 +4,10 @@ import com.nicksteger.scheduler.data.entity.User;
 import com.nicksteger.scheduler.data.repository.EventRepository;
 import com.nicksteger.scheduler.data.repository.UserRepository;
 import com.nicksteger.scheduler.service.security.EncryptionService;
+import com.nicksteger.scheduler.service.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,5 +47,13 @@ public class UserService {
 
     public void deleteUser(User user) {
         this.userRepository.delete(user.getId());
+    }
+
+    public User getUserFromAuthentication(Authentication authentication) {
+        if (authentication != null) {
+            UserDetails userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            return getUserByUsername(userDetails.getUsername());
+        }
+        return null;
     }
 }
