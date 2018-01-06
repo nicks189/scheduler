@@ -43,7 +43,7 @@ public class SchedulerController {
         List<Event> events = null;
         User user = this.userService.getUserFromAuthentication(authentication);
         if (user == null) {
-            return "temp_error";
+            return "error";
         }
         events = this.eventService.getAllEventsForUser(user);
         model.addAttribute("events", events);
@@ -58,7 +58,7 @@ public class SchedulerController {
         List<Event> events = null;
         User user = this.userService.getUserFromAuthentication(authentication);
         if (user == null) {
-            return "temp_error";
+            return "error";
         }
         events = this.eventService.getEventsForDateAndUser(dateString, user);
         model.addAttribute("events", events);
@@ -79,7 +79,7 @@ public class SchedulerController {
     public String calendarForm(@ModelAttribute(value = "generalForm") GeneralFormView generalFormView,
                                BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "temp_error";
+            return "error";
         }
         return "redirect:/scheduler/calendar/" + generalFormView.getFormText();
     }
@@ -89,7 +89,7 @@ public class SchedulerController {
                             Authentication authentication) {
         User user = this.userService.getUserFromAuthentication(authentication);
         if (bindingResult.hasErrors() || user == null) {
-            return "temp_error";
+            return "error";
         }
         event.setUserId(user.getId());
         this.eventService.saveEvent(event);
@@ -108,7 +108,7 @@ public class SchedulerController {
     public String updateEvent(@PathVariable(value = "id") long id, Model model, Authentication authentication) {
         User user = this.userService.getUserFromAuthentication(authentication);
         if (user == null) {
-            return "temp_error";
+            return "error";
         }
         Event event = this.eventService.getEventById(id);
         event.setId(id);
