@@ -112,6 +112,9 @@ public class SchedulerController {
         }
         Event event = this.eventService.getEventById(id);
         event.setId(id);
+        if (event.getUserId() != user.getId()) {
+            return "redirect:/scheduler/events";
+        }
         model.addAttribute("event", event);
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_SAVE");
@@ -119,9 +122,12 @@ public class SchedulerController {
     }
 
     @RequestMapping(value = "/delete-event/{id}", method = RequestMethod.GET)
-    public String deleteEvent(@PathVariable(value = "id") long id, Model model) {
-        this.eventService.deleteEvent(id);
-        User user = this.userService.getUserByUsername("nsteger");
+    public String deleteEvent(@PathVariable(value = "id") long id, Model model, Authentication authentication) {
+        User user = this.userService.getUserFromAuthentication(authentication);
+        if (user == null) {
+            return "redirect:/scheduler/events";
+        }
+        this.eventService.deleteEventForUser(this.eventService.getEventById(id), user);
         List<Event> events = this.eventService.getAllEventsForUser(user);
         model.addAttribute("events", events);
         model.addAttribute("currentDate", DateService.getCurrentDateString());
