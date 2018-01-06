@@ -1,4 +1,4 @@
-package com.nicksteger.scheduler.data.view;
+package com.nicksteger.scheduler.view;
 
 public class GeneralFormView {
     private String formText;
