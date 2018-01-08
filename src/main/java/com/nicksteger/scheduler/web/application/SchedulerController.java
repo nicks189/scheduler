@@ -84,18 +84,6 @@ public class SchedulerController {
         return "redirect:/scheduler/calendar/" + generalFormView.getFormText();
     }
 
-    @RequestMapping(value = "/save-event", method = RequestMethod.POST)
-    public String saveEvent(@Valid @ModelAttribute(value = "event") Event event, BindingResult bindingResult,
-                            Authentication authentication) {
-        User user = this.userService.getUserFromAuthentication(authentication);
-        if (bindingResult.hasErrors() || user == null) {
-            return "error";
-        }
-        event.setUserId(user.getId());
-        this.eventService.saveEvent(event);
-        return "redirect:/scheduler/events";
-    }
-
     @RequestMapping(value = "/new-event", method = RequestMethod.GET)
     public String newEvent(Model model) {
         model.addAttribute("event", new Event());
@@ -119,6 +107,34 @@ public class SchedulerController {
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         model.addAttribute("mode", "MODE_SAVE");
         return "scheduler";
+    }
+
+    @RequestMapping(value = "/save-event", method = RequestMethod.POST)
+    public String saveEvent(@Valid @ModelAttribute(value = "event") Event event, BindingResult bindingResult,
+                            Authentication authentication) {
+        User user = this.userService.getUserFromAuthentication(authentication);
+        if (bindingResult.hasErrors() || user == null) {
+            return "error";
+        }
+        event.setUserId(user.getId());
+        this.eventService.saveEvent(event);
+        return "redirect:/scheduler/events";
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String register(Model model) {
+        model.addAttribute("user", new User());
+        model.addAttribute("currentDate", DateService.getCurrentDateString());
+        return "register";
+    }
+
+    @RequestMapping(value = "/save-user", method = RequestMethod.POST)
+    public String saveUser(@Valid @ModelAttribute(value = "user") User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "error";
+        }
+        this.userService.saveUser(user);
+        return "redirect:/scheduler/login";
     }
 
     @RequestMapping(value = "/delete-event/{id}", method = RequestMethod.GET)
@@ -151,6 +167,5 @@ public class SchedulerController {
     public String logout() {
         return "logout";
     }
-
 
 }
