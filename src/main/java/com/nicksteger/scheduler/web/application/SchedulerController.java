@@ -1,5 +1,6 @@
 package com.nicksteger.scheduler.web.application;
 
+import com.nicksteger.scheduler.data.dto.UserDto;
 import com.nicksteger.scheduler.view.GeneralFormView;
 import com.nicksteger.scheduler.service.DateService;
 import com.nicksteger.scheduler.service.EventService;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -123,17 +125,20 @@ public class SchedulerController {
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String register(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("userDto", new UserDto());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         return "register";
     }
 
-    @RequestMapping(value = "/save-user", method = RequestMethod.POST)
-    public String saveUser(@Valid @ModelAttribute(value = "user") User user, BindingResult bindingResult) {
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String saveUser(@Valid @ModelAttribute(value = "userDto") UserDto userDto, BindingResult bindingResult, Errors errors) {
         if (bindingResult.hasErrors()) {
             return "error";
         }
-        this.userService.saveUser(user);
+        User user = this.userService.registerNewUser(userDto);
+        if (user == null) {
+            return "error";
+        }
         return "redirect:/scheduler/login";
     }
 
