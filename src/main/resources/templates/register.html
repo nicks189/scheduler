@@ -10,14 +10,12 @@
 <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 <div>
 
-    <form action="#" th:action="@{/scheduler/save-user}" th:object="${user}" method="post">
+    <form action="#" th:action="@{/scheduler/save-user}" th:object="${userFormView}" method="post">
         <div>
             <h3>Register username and password</h3>
             <hr/>
             <div class="table-responsive">
                 <table class="table table-striped">
-                    <span><input type="hidden" th:field="*{id}" /></span>
-                    <span><input type="hidden" th:field="*{encryptedPassword}" /></span>
                     <tr>
                         <td><label> Username : <input type="text" name="username" th:field="*{username}"/> </label></td>
                     </tr>
@@ -29,6 +27,9 @@
                     </tr>
                     <tr>
                         <td><label> Password : <input type="password" name="password" th:field="*{password}"/> </label></td>
+                    </tr>
+                    <tr>
+                        <td><label> Confirm password : <input type="password" name="confirmedPassword" th:field="*{confirmedPassword}"/> </label></td>
                     </tr>
                     <tr>
                         <td> <button type="submit" class="btn btn-default">Register</button></td>

@@ -7,6 +7,7 @@ import com.nicksteger.scheduler.service.UserService;
 import com.nicksteger.scheduler.data.entity.Event;
 import com.nicksteger.scheduler.data.entity.User;
 import com.nicksteger.scheduler.service.security.UserDetailsImpl;
+import com.nicksteger.scheduler.view.UserFormView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -123,16 +124,25 @@ public class SchedulerController {
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String register(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("userFormView", new UserFormView());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         return "register";
     }
 
     @RequestMapping(value = "/save-user", method = RequestMethod.POST)
-    public String saveUser(@Valid @ModelAttribute(value = "user") User user, BindingResult bindingResult) {
+    public String saveUser(@ModelAttribute(value = "userFormView") UserFormView userFormView,
+                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "error";
         }
+        if (!(userFormView.getPassword().equals(userFormView.getConfirmedPassword()))) {
+            return "redirect:/scheduler/register";
+        }
+        User user = new User();
+        user.setUsername(userFormView.getUsername());
+        user.setFirstName(userFormView.getFirstName());
+        user.setLastName(userFormView.getLastName());
+        user.setPassword(userFormView.getPassword());
         this.userService.saveUser(user);
         return "redirect:/scheduler/login";
     }
