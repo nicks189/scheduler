@@ -83,6 +83,9 @@ public class UserService {
 
     public boolean usernameExists(String username) {
         User user = this.userRepository.findByUsername(username);
-        return user != null;
+        if (user != null) {
+            return true;
+        }
+        return false;
     }
 }
