@@ -17,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -131,15 +133,21 @@ public class SchedulerController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String saveUser(@Valid @ModelAttribute(value = "userDto") UserDto userDto, BindingResult bindingResult, Errors errors) {
+    public String saveUser(@Valid @ModelAttribute(value = "userDto") UserDto userDto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
-            return "error";
+            return "register";
         }
         User user = this.userService.registerNewUser(userDto);
         if (user == null) {
+            bindingResult.rejectValue("username", "error.username", "Username is unavailable");
+            return "register";
+        }
+        try {
+            httpServletRequest.login(user.getUsername(), user.getPassword());
+        } catch (ServletException e) {
             return "error";
         }
-        return "redirect:/scheduler/login";
+        return "redirect:/scheduler";
     }
 
     @RequestMapping(value = "/delete-event/{id}", method = RequestMethod.GET)
