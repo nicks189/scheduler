@@ -166,8 +166,11 @@ public class SchedulerController {
     }
 
     @RequestMapping(value = "/delete-expired-events", method = RequestMethod.GET)
-    public String deleteExpiredEvents() {
-        User user = this.userService.getUserByUsername("nsteger");
+    public String deleteExpiredEvents(Authentication authentication) {
+        User user = this.userService.getUserFromAuthentication(authentication);
+        if (user == null) {
+            return "redirect:/scheduler/events";
+        }
         this.eventService.deleteExpiredEvents(this.eventService.getAllEventsForUser(user));
         return "redirect:/scheduler/events";
     }
