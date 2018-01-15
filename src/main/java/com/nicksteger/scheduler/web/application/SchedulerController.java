@@ -1,5 +1,6 @@
 package com.nicksteger.scheduler.web.application;
 
+import com.nicksteger.scheduler.data.dto.UserDto;
 import com.nicksteger.scheduler.view.GeneralFormView;
 import com.nicksteger.scheduler.service.DateService;
 import com.nicksteger.scheduler.service.EventService;
@@ -14,8 +15,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -124,27 +128,27 @@ public class SchedulerController {
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String register(Model model) {
-        model.addAttribute("userFormView", new UserFormView());
+        model.addAttribute("userDto", new UserDto());
         model.addAttribute("currentDate", DateService.getCurrentDateString());
         return "register";
     }
 
-    @RequestMapping(value = "/save-user", method = RequestMethod.POST)
-    public String saveUser(@ModelAttribute(value = "userFormView") UserFormView userFormView,
-                           BindingResult bindingResult) {
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String saveUser(@Valid @ModelAttribute(value = "userDto") UserDto userDto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
+            return "register";
+        }
+        User user = this.userService.registerNewUser(userDto);
+        if (user == null) {
+            bindingResult.rejectValue("username", "error.username", "Username is unavailable");
+            return "register";
+        }
+        try {
+            httpServletRequest.login(user.getUsername(), user.getPassword());
+        } catch (ServletException e) {
             return "error";
         }
-        if (!(userFormView.getPassword().equals(userFormView.getConfirmedPassword()))) {
-            return "redirect:/scheduler/register";
-        }
-        User user = new User();
-        user.setUsername(userFormView.getUsername());
-        user.setFirstName(userFormView.getFirstName());
-        user.setLastName(userFormView.getLastName());
-        user.setPassword(userFormView.getPassword());
-        this.userService.saveUser(user);
-        return "redirect:/scheduler/login";
+        return "redirect:/scheduler";
     }
 
     @RequestMapping(value = "/delete-event/{id}", method = RequestMethod.GET)

@@ -9,35 +9,57 @@
 
 <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 <div>
-
-    <form action="#" th:action="@{/scheduler/save-user}" th:object="${userFormView}" method="post">
-        <div>
-            <h3>Register username and password</h3>
-            <hr/>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <tr>
-                        <td><label> Username : <input type="text" name="username" th:field="*{username}"/> </label></td>
-                    </tr>
-                    <tr>
-                        <td><label> First name : <input type="text" name="firstname" th:field="*{firstName}"/> </label></td>
-                    </tr>
-                    <tr>
-                        <td><label> Last name : <input type="text" name="lastname" th:field="*{lastName}"/> </label></td>
-                    </tr>
-                    <tr>
-                        <td><label> Password : <input type="password" name="password" th:field="*{password}"/> </label></td>
-                    </tr>
-                    <tr>
-                        <td><label> Confirm password : <input type="password" name="confirmedPassword" th:field="*{confirmedPassword}"/> </label></td>
-                    </tr>
-                    <tr>
-                        <td> <button type="submit" class="btn btn-default">Register</button></td>
-                    </tr>
-                </table>
+    <div class="container text-center">
+        <h3>Register</h3>
+        <hr />
+        <form class="form-horizontal" action="#" th:action="@{/scheduler/register}" th:object="${userDto}" method="post">
+            <div class="form-group">
+                <label class="control-label col-md-3">First Name</label>
+                <div class="input-group col-md-6">
+                    <input type="text" class="form-control" name="firstName" th:field="*{firstName}" />
+                    <p style="color:red" th:if="${#fields.errors('firstName')}"
+                       th:errors="*{firstName}">Validation error</p>
+                </div>
             </div>
-        </div>
-    </form>
+            <div class="form-group">
+                <label class="control-label col-md-3">Last Name</label>
+                <div class="input-group col-md-6">
+                    <input type="text" class="form-control" name="lastName" th:field="*{lastName}" />
+                    <p style="color:red" th:each="error: ${#fields.errors('lastName')}"
+                       th:errors="*{lastName}">Validation error</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Username</label>
+                <div class="input-group col-md-6">
+                    <input type="text" class="form-control" name="username" th:field="*{username}" />
+                    <p style="color:red" th:each="error: ${#fields.errors('username')}"
+                        th:errors="*{username}">Validation error</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Password</label>
+                <div class="input-group col-md-6">
+                    <input type="password" class="form-control" name="password" th:field="*{password}" />
+                    <p style="color:red" th:each="error: ${#fields.errors('password')}"
+                       th:errors="*{password}">Validation error</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Confirm Password</label>
+                <div class="input-group col-md-6">
+                    <input type="password" class="form-control" name="matchingPassword" th:field="*{matchingPassword}" />
+                </div>
+            </div>
+            <div>
+                <p style="color:red" th:each="error: ${#fields.errors('global')}"
+                   th:text="${error}">Validation error</p>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Register" />
+            </div>
+        </form>
+    </div>
 </div>
 
 </body>
