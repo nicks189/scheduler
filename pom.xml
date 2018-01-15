@@ -5,7 +5,7 @@
 
 	<groupId>com.nicksteger</groupId>
 	<artifactId>schedular</artifactId>
-	<version>0.0.6-SNAPSHOT</version>
+	<version>0.0.7-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>schedular</name>
