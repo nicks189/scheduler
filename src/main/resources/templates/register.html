@@ -25,7 +25,7 @@
                 <label class="control-label col-md-3">Last Name</label>
                 <div class="input-group col-md-6">
                     <input type="text" class="form-control" name="lastName" th:field="*{lastName}" />
-                    <p style="color:red" th:each="error: ${#fields.errors('lastName')}"
+                    <p style="color:red" th:if="${#fields.errors('lastName')}"
                        th:errors="*{lastName}">Validation error</p>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                 <label class="control-label col-md-3">Username</label>
                 <div class="input-group col-md-6">
                     <input type="text" class="form-control" name="username" th:field="*{username}" />
-                    <p style="color:red" th:each="error: ${#fields.errors('username')}"
+                    <p style="color:red" th:if="${#fields.errors('username')}"
                         th:errors="*{username}">Validation error</p>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                 <label class="control-label col-md-3">Password</label>
                 <div class="input-group col-md-6">
                     <input type="password" class="form-control" name="password" th:field="*{password}" />
-                    <p style="color:red" th:each="error: ${#fields.errors('password')}"
+                    <p style="color:red" th:if="${#fields.errors('password')}"
                        th:errors="*{password}">Validation error</p>
                 </div>
             </div>
