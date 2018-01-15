@@ -14,27 +14,35 @@
                 <hr />
                 <form class="form-horizontal" action="#" th:action="@{/scheduler/register}" th:object="${userDto}" method="post">
                     <div class="form-group">
-                        <label class="control-label col-md-3">Username</label>
-                        <div class="input-group col-md-6">
-                            <input type="text" class="form-control" name="username" th:field="*{username}" />
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label col-md-3">First Name</label>
                         <div class="input-group col-md-6">
                             <input type="text" class="form-control" name="firstName" th:field="*{firstName}" />
+                            <p style="color:red" th:if="${#fields.errors('firstName')}"
+                               th:errors="*{firstName}">Validation error</p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3">Last Name</label>
                         <div class="input-group col-md-6">
                             <input type="text" class="form-control" name="lastName" th:field="*{lastName}" />
+                            <p style="color:red" th:each="error: ${#fields.errors('lastName')}"
+                               th:errors="*{lastName}">Validation error</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Username</label>
+                        <div class="input-group col-md-6">
+                            <input type="text" class="form-control" name="username" th:field="*{username}" />
+                            <p style="color:red" th:each="error: ${#fields.errors('username')}"
+                                th:errors="*{username}">Validation error</p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3">Password</label>
                         <div class="input-group col-md-6">
                             <input type="password" class="form-control" name="password" th:field="*{password}" />
+                            <p style="color:red" th:each="error: ${#fields.errors('password')}"
+                               th:errors="*{password}">Validation error</p>
                         </div>
                     </div>
                     <div class="form-group">
@@ -42,6 +50,10 @@
                         <div class="input-group col-md-6">
                             <input type="password" class="form-control" name="matchingPassword" th:field="*{matchingPassword}" />
                         </div>
+                    </div>
+                    <div>
+                        <p style="color:red" th:each="error: ${#fields.errors('global')}"
+                           th:text="${error}">Validation error</p>
                     </div>
                     <div class="form-group">
                         <input type="submit" class="btn btn-primary" value="Register" />

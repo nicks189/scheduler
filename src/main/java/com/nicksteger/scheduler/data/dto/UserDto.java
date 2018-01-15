@@ -1,27 +1,32 @@
 package com.nicksteger.scheduler.data.dto;
 
 import com.nicksteger.scheduler.annotations.validation.PasswordMatches;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @PasswordMatches
 public class UserDto {
-    @NotNull
-    @NotEmpty
+    @NotBlank
+    @Size(min = 1, max = 64)
     private String firstName;
 
-    @NotNull
     @NotEmpty
+    @NotBlank
+    @Size(min = 1, max = 64)
     private String lastName;
 
-    @NotNull
     @NotEmpty
+    @NotBlank
+    @Size(min = 6, max = 32)
     private String password;
     private String matchingPassword;
 
-    @NotNull
     @NotEmpty
+    @NotBlank
+    @Size(min = 4, max = 32)
     private String username;
 
     public String getFirstName() {
